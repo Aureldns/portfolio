@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aurélien DENIS - Portfolio Cybersécurité</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tahoma:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Base styles matching Windows XP */
+        body {
+            font-family: 'Tahoma', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; 
+            background: linear-gradient(to bottom, #297be2 0%, #3e9eef 55%, #6cb938 55%, #419121 100%);
+        }
+
+        #desktop {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            /* Fond d'écran 4K Windows XP */
+            background-image: url('https://cf.preview.redd.it/microsoft-design-team-shared-an-updated-4k-version-of-the-v0-9owhc7wuc65b1.jpg?width=1080&crop=smart&auto=webp&s=f6cb210e28cc3111881e0f366f14b262d2a7773b');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* --- Sas de Sécurité Anti-Bot (Style Cloudflare) --- */
+        #security-gateway {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #121212;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100000;
+            transition: opacity 0.8s ease-out;
+        }
+
+        .gateway-box {
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+
+        /* Desktop Icons */
+        #desktop-icons {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            height: calc(100vh - 80px);
+            gap: 15px;
+            align-content: flex-start;
+            z-index: 10;
+        }
+
+        .desktop-icon {
+            width: 75px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            border: 1px solid transparent;
+        }
+
+        .desktop-icon:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 1px dotted rgba(255, 255, 255, 0.6);
+        }
+
+        .desktop-icon-emoji {
+            font-size: 36px;
+            filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.6));
+            margin-bottom: 4px;
+        }
+
+        .desktop-icon-text {
+            color: white;
+            font-size: 0.8rem;
+            text-align: center;
+            text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
+            user-select: none;
+            line-height: 1.1;
+        }
+
+        /* Taskbar */
+        #taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: linear-gradient(to bottom, #245edb 0%, #3f8cf3 9%, #245edb 18%, #245edb 92%, #1941a5 100%);
+            display: flex;
+            align-items: center;
+            z-index: 9999;
+            box-shadow: 0 -1px 3px rgba(0,0,0,0.5);
+        }
+
+        #start-button {
+            height: 100%;
+            background: linear-gradient(to bottom, #44a552 0%, #358b3f 9%, #358b3f 18%, #358b3f 92%, #2a6f32 100%);
+            color: white;
+            font-weight: bold;
+            font-style: italic;
+            font-size: 1.1rem;
+            padding: 0 25px 0 20px;
+            border-radius: 0 15px 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.3) inset, 2px 0 3px rgba(0,0,0,0.4);
+            cursor: pointer;
+            border: none;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+            flex-shrink: 0;
+        }
+        
+        #start-button:hover { background: linear-gradient(to bottom, #4cb55b 0%, #3c9b47 9%, #3c9b47 18%, #3c9b47 92%, #307f3a 100%); }
+        #start-button:active { box-shadow: inset 2px 2px 5px rgba(0,0,0,0.6); }
+
+        #taskbar-items {
+            display: flex;
+            flex-grow: 1;
+            height: 100%;
+            padding: 0 10px;
+            align-items: center;
+            gap: 4px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scrollbar-width: none;
+        }
+
+        #taskbar-items::-webkit-scrollbar { display: none; }
+
+        .taskbar-btn {
+            background: linear-gradient(to bottom, #3b7ee0 0%, #2f68c7 100%);
+            color: white;
+            border: 1px solid #1c4b9e;
+            border-radius: 3px;
+            padding: 0 15px;
+            height: 30px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: inset 1px 1px 1px rgba(255,255,255,0.3);
+            white-space: nowrap;
+            transition: all 0.1s;
+            user-select: none;
+            flex-shrink: 0;
+        }
+
+        .taskbar-btn:hover { background: linear-gradient(to bottom, #4b8de8 0%, #3f78d7 100%); }
+        .taskbar-btn.active {
+            background: linear-gradient(to bottom, #1d4694 0%, #265ab3 100%);
+            box-shadow: inset 2px 2px 4px rgba(0,0,0,0.5);
+            color: #f0f0f0;
+        }
+
+        #taskbar-tray {
+            padding: 0 15px;
+            color: white;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            border-left: 1px solid rgba(255,255,255,0.2);
+            box-shadow: inset 1px 0 0 rgba(0,0,0,0.2);
+            height: 100%;
+            background: linear-gradient(to bottom, #0b77e8 0%, #1681ed 100%);
+            flex-shrink: 0;
+        }
+
+        /* Windows */
+        .xp-window {
+            position: absolute;
+            width: 450px;
+            max-width: 90vw;
+            height: fit-content;
+            background: #0033d6;
+            border-radius: 8px 8px 0 0;
+            padding: 3px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            display: none;
+            flex-direction: column;
+            user-select: none;
+        }
+
+        .xp-window.open {
+            display: flex;
+            animation: openWindow 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes openWindow {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .window-header {
+            background: linear-gradient(to right, #0054e3 0%, #2581ff 8%, #0054e3 100%);
+            color: white;
+            padding: 4px 6px;
+            border-radius: 6px 6px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: default;
+            font-weight: bold;
+            font-size: 0.9rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            touch-action: none;
+        }
+
+        .window-close {
+            background: linear-gradient(to bottom, #e87b6e 0%, #df422f 100%);
+            border: 1px solid white;
+            border-radius: 3px;
+            color: white;
+            width: 21px;
+            height: 21px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: inset 1px 1px 2px rgba(255,255,255,0.6), 1px 1px 2px rgba(0,0,0,0.4);
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+        }
+
+        .window-close:hover { background: linear-gradient(to bottom, #f28d82 0%, #e65241 100%); }
+        .window-close:active { background: linear-gradient(to bottom, #b32a1b 0%, #cc3624 100%); }
+
+        .window-content {
+            background: linear-gradient(to bottom, #e3f0fe 0%, #bcd6fb 100%);
+            border: 1px solid #0033d6;
+            margin-top: 1px;
+            padding: 15px;
+            font-size: 0.95rem;
+            color: #222;
+            cursor: text;
+            user-select: text;
+            height: auto; 
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .window-content h2 {
+            font-size: 1.2rem;
+            color: #0033d6;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #8caee6;
+            padding-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .window-content h2:first-child { margin-top: 0; }
+        .window-content ul { list-style-type: disc; margin-left: 20px; margin-top: 10px; }
+        .window-content li { margin-bottom: 6px; }
+        .window-content a { color: #0033d6; text-decoration: none; font-weight: 700; }
+        .window-content a:hover { text-decoration: underline; }
+
+        @media (max-width: 768px) {
+            .xp-window {
+                width: 95% !important;
+                left: 2.5% !important;
+                top: 2% !important;
+                height: fit-content !important;
+                max-height: calc(100vh - 50px) !important;
+                transform: none !important;
+            }
+            .xp-window .window-content { max-height: 75vh !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sas de sécurité Anti-Bot Interactif -->
+    <div id="security-gateway">
+        <div class="gateway-box">
+            <h2 class="text-xl font-bold mb-2 text-white">Vérification de sécurité</h2>
+            <p class="text-gray-400 text-sm mb-6">Afin d'accéder à l'environnement virtuel, veuillez confirmer que vous n'êtes pas un script automatisé</p>
+            
+            <!-- Le bouton a reçu un identifiant pour que le JavaScript gère le clic -->
+            <div id="verify-button" class="flex items-center justify-center cursor-pointer bg-black p-4 border border-gray-600 rounded hover:bg-gray-900 active:scale-95 transition select-none">
+                
+                <!-- Tous les éléments internes ont 'pointer-events-none' pour ne pas bloquer le clic sur la div parente -->
+                <div id="cf-checkbox" class="w-6 h-6 border-2 border-gray-400 rounded-sm bg-white flex items-center justify-center mr-4 transition-colors pointer-events-none">
+                    <svg id="cf-checkmark" class="w-5 h-5 text-green-600 hidden pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="4"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                </div>
+                
+                <div id="cf-spinner" class="w-6 h-6 border-2 border-gray-400 border-t-green-500 rounded-full animate-spin mr-4 hidden pointer-events-none"></div>
+                
+                <span class="text-md font-semibold text-gray-200 pointer-events-none">Je suis un humain</span>
+            </div>
+            
+            <div class="mt-4 text-xs text-gray-600 text-right">
+                Protection by CyberSec Gate
+            </div>
+        </div>
+    </div>
+
+    <!-- Le Bureau Windows XP -->
+    <div id="desktop">
+        <div id="desktop-icons">
+            <!-- Icons injected here dynamically -->
+        </div>
+        <!-- Windows injected here dynamically -->
+    </div>
+
+    <div id="taskbar">
+        <button id="start-button">Aurélien DENIS</button>
+        <div id="taskbar-items">
+            <!-- Taskbar buttons -->
+        </div>
+        <div id="taskbar-tray">
+            <span id="clock">12:00</span>
+        </div>
+    </div>
+
+    <script>
+        // LOGIQUE ANTI-BOT INTERACTIVE
+        let isVerifying = false;
+        let isDesktopInitialized = false;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Attacher l'événement au bouton de manière sécurisée et cross-browser
+            const verifyButton = document.getElementById('verify-button');
+            if(verifyButton) {
+                verifyButton.addEventListener('click', startVerification);
+            }
+        });
+
+        function startVerification() {
+            if (isVerifying || isDesktopInitialized) return;
+            isVerifying = true;
+
+            const checkbox = document.getElementById('cf-checkbox');
+            const checkmark = document.getElementById('cf-checkmark');
+            const spinner = document.getElementById('cf-spinner');
+            const gateway = document.getElementById('security-gateway');
+
+            // 1. Cacher la case, montrer le spinner
+            checkbox.classList.add('hidden');
+            spinner.classList.remove('hidden');
+
+            // 2. Simuler un temps d'analyse réseau
+            setTimeout(() => {
+                // Arrêter le spinner, montrer la coche verte
+                spinner.classList.add('hidden');
+                checkbox.classList.remove('hidden', 'border-gray-400');
+                checkbox.classList.add('border-green-600');
+                checkmark.classList.remove('hidden');
+
+                // 3. Lancer le bureau avec un petit délai
+                setTimeout(() => {
+                    initDesktop();
+                    gateway.style.opacity = '0';
+                    setTimeout(() => {
+                        gateway.style.display = 'none';
+                    }, 800); // Temps du fondu
+                }, 600);
+            }, 1200);
+        }
+
+        // DONNÉES DU PORTFOLIO (CV & Liens)
+        const portfolioData = [
+            {
+                id: 'profil',
+                title: 'Profil personnel',
+                emoji: '👤',
+                content: `
+                    <h2>👤 À propos de moi</h2>
+                    <p class="mb-4">Bienvenue sur mon portfolio ! Je suis Aurélien DENIS, Ingénieur en cybersécurité diplômé de l'EFREI. Spécialisé dans la sécurisation des systèmes d'information, la gestion des risques et les cyber opérations, je mets mon expérience en environnement DevSecOps et en réponse aux incidents au service de la protection des infrastructures. Animé par un fort esprit de coopération et le sens du support, mon objectif est d'accompagner les équipes projets dans l'évaluation de la sécurité et de diffuser une véritable culture cybersécurité, tout particulièrement au sein d'environnements industriels critiques</p>
+                    
+                    <h2>🌍 Langues</h2>
+                    <ul>
+                        <li><strong>Français :</strong> Courant - Excellentes qualités rédactionnelles et oratoires (Certificat Voltaire: 713/1000)</li>
+                        <li><strong>Anglais :</strong> Courant (TOEIC 833/990) - Capacité à évoluer dans un environnement international</li>
+                    </ul>
+
+                    <h2>🎯 Centres d'intérêt</h2>
+                    <p>Running, cyclisme, musculation, randonnée, sports automobiles.</p>
+                `
+            },
+            {
+                id: 'formation',
+                title: 'Formation',
+                emoji: '🎓',
+                content: `
+                    <h2>🎓 EFREI Paris - Villejuif</h2>
+                    <p class="italic text-gray-700 mb-2">Diplôme d'ingénieur - Majeure Cybersécurité Infrastructure et Logiciels</p>
+                    <p class="text-sm font-bold text-blue-800 mb-2">Septembre 2021 - Août 2026</p>
+                    <ul>
+                        <li>Forensics et analyse post-mortem</li>
+                        <li>Sécurité cloud et virtualisation</li>
+                        <li>Sécurité Linux avancée</li>
+                        <li>Pentest</li>
+                        <li>Sécurité Windows Avancée & AD</li>
+                        <li>Architecture sécurisée et analyse de vulnérabilité</li>
+                        <li>Cyber défense et attaque</li>
+                        <li>Endpoint Detection & Response</li>
+                        <li>Projets Sécurité (Defense & EDR)</li>
+                        <li>Sécurité Cloud Azure</li>
+                    </ul>
+                `
+            },
+            {
+                id: 'experiences',
+                title: 'Expériences',
+                emoji: '💼',
+                content: `
+                    <h2>💼 Ingénieur Cybersécurité</h2>
+                    <p class="italic text-gray-700">BeeBryte - Lyon</p>
+                    <p class="text-sm font-bold text-blue-800 mb-2">Sept. 2025 - Août 2026</p>
+                    <ul>
+                        <li><strong>Gestion des incidents & contrôles :</strong> Détection, recueil de données et investigation numérique (DFIR) sur des cyberattaques. Rédaction de rapports post-mortem et pilotage des plans de remédiation</li>
+                        <li><strong>Gouvernance & risques :</strong> Déploiement de dispositifs de contrôle (scans de vulnérabilités) pour maîtriser la production informatique avant mise en production</li>
+                        <li><strong>Benchmarking & Veille :</strong> Étude comparative des pratiques du marché (solutions CNAPP) face aux nouvelles menaces (IA, Phishing)</li>
+                        <li><strong>Communication :</strong> Synthèse d'informations complexes et restitution orale via des sessions de sensibilisation à la cybercriminalité</li>
+                    </ul>
+                    
+                    <h2>💼 Ingénieur DevSecOps</h2>
+                    <p class="italic text-gray-700">BeeBryte - Lyon</p>
+                    <p class="text-sm font-bold text-blue-800 mb-2">Nov. 2024 - Avr. 2025</p>
+                    <ul>
+                        <li><strong>Audit IT & Gouvernance :</strong> Pilotage d'un audit de sécurité applicative basé sur les référentiels du marché (OWASP SAMM)</li>
+                        <li><strong>Infrastructures :</strong> Analyse de données réseau et traitement de 50 alertes/semaine via Microsoft Defender et Sysdig</li>
+                        <li><strong>Contrôle interne (Hardening) :</strong> Rédaction de guides de bonnes pratiques et évaluation du dispositif de sécurité des infrastructures Cloud (AWS)</li>
+                    </ul>
+                `
+            },
+            {
+                id: 'projets',
+                title: 'Projets',
+                emoji: '🚀',
+                content: `
+                    <h2>🛡️ CAESAR</h2>
+                    <p class="mb-4">Création d'un outil d'évaluation à distance pour le contrôle des vulnérabilités des équipements (Scripting)</p>
+                    
+                    <h2>☁️ Cloudyf</h2>
+                    <p>Conception et gouvernance de la sécurité d'un Système d'Information complet (Active Directory, Mails, DNS, VPN, PKI), incluant l'analyse approfondie des journaux (Logs)</p>
+                `
+            },
+            {
+                id: 'competences',
+                title: 'Compétences',
+                emoji: '⚙️',
+                content: `
+                    <h2>🛡️ Périmètre IT & Audit</h2>
+                    <ul>
+                        <li><strong>Gouvernance :</strong> Gouvernance des SI, Continuité IT, Pilotage d'audit</li>
+                        <li><strong>Méthodologie :</strong> OWASP, MITRE, recueil de données, constats d'audit, recommandations et plan d'action</li>
+                        <li><strong>Opérationnel :</strong> Cybersécurité, Production informatique, Sécurité applicative</li>
+                    </ul>
+
+                    <h2>🛠️ Outils d'investigation & Réseau</h2>
+                    <ul>
+                        <li>Nmap, Wireshark, Burp Suite, Metasploit</li>
+                        <li>Microsoft Defender, Sysdig</li>
+                    </ul>
+
+                    <h2>📜 Certifications & Plateformes</h2>
+                    <ul>
+                        <li><strong>HackTheBox Sherlocks :</strong> DFIR, Malware Analysis, SOC, Threat Intelligence</li>
+                        <li><strong>TryHackMe :</strong> Jr Penetration Tester, Web Fundamentals</li>
+                    </ul>
+
+                    <h2>🤝 Soft Skills</h2>
+                    <ul>
+                        <li>Rigueur, sens du détail, organisation</li>
+                        <li>Esprit collaboratif, esprit critique, capacité d'adaptation</li>
+                    </ul>
+                `
+            },
+            {
+                id: 'contacts',
+                title: 'Contacts',
+                emoji: '✉️',
+                content: `
+                    <h2>✉️ Me contacter</h2>
+                    <ul>
+                        <li>📧 <strong>Email :</strong> <a href="mailto:aurelien-louis.denis@efrei.net">aurelien-louis.denis@efrei.net</a></li>
+                        <li>📞 <strong>Téléphone :</strong> +33 7 83 40 06 00</li>
+                        <li>📍 <strong>Localisation :</strong> Île-de-France</li>
+                        <li>💼 <strong>LinkedIn :</strong> <a href="https://linkedin.com/in/denis-aurelien" target="_blank">linkedin.com/in/denis-aurelien</a></li>
+                    </ul>
+                `
+            },
+            {
+                id: 'hackthebox',
+                title: 'HackTheBox',
+                emoji: '🟩',
+                content: `
+                    <div class="flex flex-col items-center text-center mt-2">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSl6kXDezXkOu83YKcB-NyPV9doDwvKp3sbSUIcq_xzeA&s=10" alt="HackTheBox Logo" class="h-16 mb-4 object-contain">
+                        <h2 style="border-bottom: none; justify-content: center; margin-bottom: 0;">Mon Profil HackTheBox</h2>
+                        <p class="mb-4 mt-2 px-2 text-sm text-gray-800">Découvrez mon avancement, mes statistiques et mes challenges résolus (DFIR, SOC, PenTesting) directement sur la plateforme</p>
+                        <a href="https://profile.hackthebox.com/profile/019f190c-0762-7333-8c32-ab28c0104b91?utm_medium=copy_url" target="_blank" class="mt-2 bg-[#9fef00] text-black font-bold py-2 px-6 rounded shadow hover:bg-[#82c400] transition" style="text-decoration: none;">
+                           Accéder à mon profil
+                        </a>
+                    </div>
+                `
+            },
+            {
+                id: 'rootme',
+                title: 'Root-Me',
+                emoji: '💀',
+                content: `
+                    <div class="flex flex-col items-center text-center mt-2">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7ftIcWZiEv5WtPqZeIEdNMxqRsMkFeCuaBtZPBfd9qQ&s=10" alt="Root-Me Logo" class="h-16 mb-4 object-contain">
+                        <h2 style="border-bottom: none; justify-content: center; margin-bottom: 0;">Mon Profil Root-Me</h2>
+                        <p class="mb-4 mt-2 px-2 text-sm text-gray-800">Consultez mes statistiques, mes challenges validés et mon classement sur la célèbre plateforme d'apprentissage</p>
+                        <a href="https://www.root-me.org/Cxoler?inc=info&lang=fr" target="_blank" class="mt-2 bg-black text-white font-bold py-2 px-6 rounded shadow hover:bg-gray-800 transition" style="text-decoration: none;">
+                           Voir mon classement
+                        </a>
+                    </div>
+                `
+            },
+            {
+                id: 'tryhackme',
+                title: 'TryHackMe',
+                emoji: '☁️',
+                content: `
+                    <div class="flex flex-col items-center text-center mt-2">
+                        <img src="https://s3-eu-west-1.amazonaws.com/tpd/logos/5f00b0f031ec4d0001f1344e/0x0.png" alt="TryHackMe Logo" class="h-16 mb-4 object-contain">
+                        <h2 style="border-bottom: none; justify-content: center; margin-bottom: 0;">Mon Profil TryHackMe</h2>
+                        <p class="mb-4 mt-2 px-2 text-sm text-gray-800">Explorez mes parcours, mes badges et mes challenges résolus sur la plateforme d'apprentissage en cybersécurité</p>
+                        <a href="https://tryhackme.com/p/Aureldns" target="_blank" class="mt-2 bg-[#6c63ff] text-white font-bold py-2 px-6 rounded shadow hover:bg-[#574fd1] transition" style="text-decoration: none;">
+                           Accéder à mon profil
+                        </a>
+                    </div>
+                `
+            }
+        ];
+
+        // LOGIQUE D'APPLICATION WINDOWS XP
+        let zIndexCounter = 100;
+        const windowsState = {};
+        const desktop = document.getElementById('desktop');
+        const desktopIconsContainer = document.getElementById('desktop-icons');
+        const taskbarItemsContainer = document.getElementById('taskbar-items');
+
+        function initDesktop() {
+            if (isDesktopInitialized) return;
+            isDesktopInitialized = true;
+
+            updateClock();
+            setInterval(updateClock, 60000);
+
+            portfolioData.forEach((data, index) => {
+                const offsetX = 50 + (index * 30);
+                const offsetY = 50 + (index * 30);
+
+                windowsState[data.id] = {
+                    isOpen: false,
+                    isMinimized: false,
+                    x: offsetX,
+                    y: offsetY
+                };
+
+                createDesktopIconDOM(data);
+                createWindowDOM(data);
+            });
+            
+            document.getElementById('start-button').addEventListener('click', () => {
+                if(!windowsState['contacts'].isOpen) {
+                     openWindow('contacts');
+                } else {
+                    focusWindow('contacts');
+                }
+            });
+        }
+
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('clock').innerText = `${hours}:${minutes}`;
+        }
+
+        function createDesktopIconDOM(data) {
+            const iconBtn = document.createElement('div');
+            iconBtn.className = 'desktop-icon';
+            iconBtn.onclick = () => openWindow(data.id);
+
+            const emojiEl = document.createElement('div');
+            emojiEl.className = 'desktop-icon-emoji';
+            emojiEl.innerText = data.emoji;
+
+            const textEl = document.createElement('div');
+            textEl.className = 'desktop-icon-text';
+            textEl.innerText = data.title;
+
+            iconBtn.appendChild(emojiEl);
+            iconBtn.appendChild(textEl);
+            desktopIconsContainer.appendChild(iconBtn);
+        }
+
+        function createWindowDOM(data) {
+            const win = document.createElement('div');
+            win.className = 'xp-window';
+            win.id = `window-${data.id}`;
+            win.style.left = `${windowsState[data.id].x}px`;
+            win.style.top = `${windowsState[data.id].y}px`;
+
+            const header = document.createElement('div');
+            header.className = 'window-header';
+            
+            const titleSpan = document.createElement('span');
+            titleSpan.innerText = `${data.title}`;
+            
+            const closeBtn = document.createElement('div');
+            closeBtn.className = 'window-close';
+            closeBtn.innerText = 'X';
+            closeBtn.addEventListener('pointerdown', (e) => { e.stopPropagation(); });
+            closeBtn.onclick = (e) => {
+                e.stopPropagation();
+                closeWindow(data.id);
+            };
+
+            header.appendChild(titleSpan);
+            header.appendChild(closeBtn);
+
+            const content = document.createElement('div');
+            content.className = 'window-content';
+            content.innerHTML = data.content;
+
+            win.appendChild(header);
+            win.appendChild(content);
+            desktop.appendChild(win);
+
+            win.addEventListener('pointerdown', () => focusWindow(data.id));
+            makeDraggable(win, header, data.id);
+        }
+
+        function openWindow(id) {
+            const win = document.getElementById(`window-${id}`);
+            win.classList.add('open');
+            win.style.display = 'flex';
+            
+            windowsState[id].isOpen = true;
+            windowsState[id].isMinimized = false;
+            
+            let taskbarBtn = document.getElementById(`btn-${id}`);
+            if (!taskbarBtn) {
+                const data = portfolioData.find(d => d.id === id);
+                createTaskbarButtonDOM(data);
+            }
+            
+            focusWindow(id);
+        }
+
+        function createTaskbarButtonDOM(data) {
+            const btn = document.createElement('button');
+            btn.className = 'taskbar-btn active';
+            btn.id = `btn-${data.id}`;
+            btn.innerText = data.title;
+            
+            btn.addEventListener('click', () => {
+                const win = document.getElementById(`window-${data.id}`);
+                if (windowsState[data.id].isMinimized || win.style.zIndex != zIndexCounter) {
+                    focusWindow(data.id);
+                    win.style.display = 'flex';
+                    windowsState[data.id].isMinimized = false;
+                    btn.classList.add('active');
+                } else {
+                    minimizeWindow(data.id);
+                }
+            });
+            
+            taskbarItemsContainer.appendChild(btn);
+        }
+
+        function closeWindow(id) {
+            const win = document.getElementById(`window-${id}`);
+            const btn = document.getElementById(`btn-${id}`);
+            win.classList.remove('open');
+            
+            setTimeout(() => {
+                if(!windowsState[id].isOpen) {
+                    win.style.display = 'none';
+                    if (btn) btn.remove();
+                }
+            }, 200);
+            
+            windowsState[id].isOpen = false;
+        }
+
+        function minimizeWindow(id) {
+            const win = document.getElementById(`window-${id}`);
+            const btn = document.getElementById(`btn-${id}`);
+            win.style.display = 'none';
+            windowsState[id].isMinimized = true;
+            if (btn) btn.classList.remove('active');
+        }
+
+        function focusWindow(id) {
+            if (!windowsState[id].isOpen || windowsState[id].isMinimized) return;
+            zIndexCounter++;
+            const win = document.getElementById(`window-${id}`);
+            win.style.zIndex = zIndexCounter;
+            
+            document.querySelectorAll('.taskbar-btn').forEach(b => b.classList.remove('active'));
+            const btn = document.getElementById(`btn-${id}`);
+            if (btn) btn.classList.add('active');
+        }
+
+        function makeDraggable(windowEl, headerEl, id) {
+            let isDragging = false;
+            let startX, startY, initialLeft, initialTop;
+
+            headerEl.addEventListener('pointerdown', dragStart);
+
+            function dragStart(e) {
+                if (window.innerWidth <= 768) return;
+                if (e.target.className === 'window-close') return;
+                
+                isDragging = true;
+                headerEl.style.cursor = 'grabbing';
+                
+                startX = e.clientX;
+                startY = e.clientY;
+                initialLeft = windowEl.offsetLeft;
+                initialTop = windowEl.offsetTop;
+
+                document.addEventListener('pointermove', drag);
+                document.addEventListener('pointerup', dragEnd);
+            }
+
+            function drag(e) {
+                if (!isDragging) return;
+                e.preventDefault();
+
+                let newLeft = initialLeft + (e.clientX - startX);
+                let newTop = initialTop + (e.clientY - startY);
+
+                if (newTop < 0) newTop = 0; 
+                
+                windowEl.style.left = `${newLeft}px`;
+                windowEl.style.top = `${newTop}px`;
+                windowsState[id].x = newLeft;
+                windowsState[id].y = newTop;
+            }
+
+            function dragEnd() {
+                isDragging = false;
+                headerEl.style.cursor = 'default';
+                document.removeEventListener('pointermove', drag);
+                document.removeEventListener('pointerup', dragEnd);
+            }
+        }
+    </script>
+</body>
+</html>
